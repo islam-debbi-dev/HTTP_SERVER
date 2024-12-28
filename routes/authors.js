@@ -8,9 +8,20 @@ const {verifyTokenAndAdmin}= require('../middlewares/verifyToken');
 // Get all authors
 router.get('/', asyncHandler(
   async (req, res) => {
+    const { pageNumber } = req.query;
+    const authorPerPage = req.query.authorPerPage || 2;
+    console.log(authorPerPage)
+    if(pageNumber){
     const authorlist = await Author.find()
+                                   .skip((pageNumber-1)*authorPerPage)
+                                   .limit(authorPerPage); 
     //.sort({firstname: 1}).select("firstname lastname -_id");
     res.status(200).json(authorlist);
+    }else{
+      const authorlist = await Author.find();
+      res.status(200).json(authorlist);
+    }
+    
   }
 ));
 
