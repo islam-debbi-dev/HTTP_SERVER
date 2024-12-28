@@ -1,6 +1,7 @@
 const {Book} = require("./models/Books.js");
-const {books} = require('./data.js');
+const {books,authors} = require('./data.js');
 const {connectToDB} = require("./config/db.js");
+const { Author } = require("./models/Author.js");
 require("dotenv").config();
 // connection to db
 connectToDB();
@@ -16,7 +17,17 @@ const importBokes = async ()=>{
         process.exit(1); // if was error will exit 
     }
 }
-
+// import authors
+           
+const importauthors = async ()=>{
+    try{
+        await Author.insertMany(authors);
+        console.log("Authors imported");
+    }catch(error){
+        console.log(error);
+        process.exit(1); // if was error will exit 
+    }
+}
 // remove books
 const removeBokes = async ()=>{
     try{
@@ -32,4 +43,7 @@ if(process.argv[2] === "-i"){
     importBokes();
 }else if(process.argv[2] === "-r"){
     removeBokes();
+}else if (process.argv[2] === "-a"){
+    importauthors();
 }
+
